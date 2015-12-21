@@ -20,10 +20,6 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<!-- 
-                    <li>@Html.ActionLink("Chat", "Index", "ChatSessions", new { area = "" }, new { @id = "chat" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                     -->
 					<li><a href=""> Chat </a></li>
 					<li><a href=""> About </a></li>
 				</ul>
