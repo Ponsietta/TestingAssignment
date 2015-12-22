@@ -11,7 +11,9 @@ public class ChatProviderStubSuccess implements ChatProvider {
 	@Override
 	public int sendMessageTo(String friendID, String msg) 
 	{
-		// TODO Auto-generated method stub
+		if(friendID == null)
+			return 1;
+		
 		return 0;
 	}
 
