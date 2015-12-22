@@ -21,7 +21,7 @@ public class ChatProviderStubTimeOut implements ChatProvider {
 	}
 
 	@Override
-	public int connect(String username, String password, String friendID) {
+	public int connect(String username, String password) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -21,8 +21,14 @@ public class ChatProviderStubSuccess implements ChatProvider {
 	}
 
 	@Override
-	public int connect(String username, String password, String friendID) {
-		// TODO Auto-generated method stub
+	public int connect(String username, String password) {
+		if (username == null || username.trim() == "" || password == null || password.trim() == "" 
+		|| !username.equals("rebmar") || !password.equals("enternow"))
+		{
+
+			return 1;
+		}
+
 		return 0;
 	}
 

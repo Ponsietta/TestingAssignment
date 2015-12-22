@@ -20,19 +20,7 @@ public class ChatSession
 	{
 		//this can be passed in and can change
 		
-		if (username == null || username.trim() == "" || password == null || password.trim() == "" 
-				|| s_friendID == null || s_friendID.trim() == "")
-		{
-			//details can be further verified here
-			return 1;
-		}
-		else
-		{
-			if(!username.equals("rebmar") || !password.equals("enternow"))
-				return 1;
-		}
-		
-		int result = provider.connect(username, password, s_friendID);
+		int result = provider.connect(username, password);
 		
         return result;
 	}
