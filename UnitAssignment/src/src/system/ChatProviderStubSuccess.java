@@ -1,7 +1,10 @@
 package src.system;
 
-public class ChatProviderStubSuccess implements ChatProvider {
-
+public class ChatProviderStubSuccess implements ChatProvider 
+{
+	
+	private String username = null;
+	
 	@Override
 	public String getName() 
 	{
@@ -13,6 +16,9 @@ public class ChatProviderStubSuccess implements ChatProvider {
 	{
 		if(friendID == null)
 			return 1;
+		
+		if(username == null)
+			return 2;
 		
 		return 0;
 	}
@@ -32,6 +38,8 @@ public class ChatProviderStubSuccess implements ChatProvider {
 		{
 			return 1;
 		}
+		
+		this.username = username;
 
 		return 0;
 	}
