@@ -2,6 +2,9 @@ package tests.webtests.PageObjects;
 
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +24,6 @@ public class Login
     public Login(WebDriver driverIn)
     { 
         driver = driverIn;
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     public void GoToLoginPage()
@@ -31,8 +33,8 @@ public class Login
 
     public void LoginToChatValid()
     {
-        driver.findElement(By.id(usernameID)).sendKeys("marziacutajar@live.co.uk");
-        driver.findElement(By.id(passwordID)).sendKeys("Marzia_admin2");
+        driver.findElement(By.id(usernameID)).sendKeys("rebmar");
+        driver.findElement(By.id(passwordID)).sendKeys("enternow");
         driver.findElement(By.id(loginBtnID)).click();
     }
 
@@ -52,10 +54,11 @@ public class Login
     {
         try
         {
-            driver.findElement(By.id(loggedInUserID));
+            //driver.findElement(By.id(loggedInUserID));
+        	driver.findElement(By.id("logoutForm"));
             return true;
         }
-        catch (NoSuchElementException e)
+        catch (org.openqa.selenium.NoSuchElementException e)
         {
             return false;
         }
@@ -68,11 +71,11 @@ public class Login
     }
     public void CheckErrorMessage()
     {
-    	assertTrue(driver.findElement(By.xpath("//div[contains(@class,'validation-summary-errors')]")).isDisplayed());
+    	assertTrue(driver.findElement(By.xpath("//div[contains(@id,'loginerror')]")).isDisplayed());
     }
 
     public void CheckThatOnLoginPage()
     {
-    	assertTrue(driver.findElement(By.xpath("//div/h2")).getText().contains("Initiate Chat Session"));
+    	assertTrue(driver.findElement(By.xpath("//div/h2")).getText().contains("Log In"));
     }
 }

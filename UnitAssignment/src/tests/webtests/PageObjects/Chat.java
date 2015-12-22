@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 public class Chat 
 {
 	private WebDriver driver;
-    //private WebDriverWait wait;
 
     private String chatPageLinkID = "chat";
     private String messageBoxID = "chatmessage";
@@ -20,7 +19,6 @@ public class Chat
     public Chat(WebDriver driverIn)
     {
         driver = driverIn;
-        //wait = new WebDriverWait(driver,TimeSpan.FromSeconds(5));
     }
 
     public void GoToChatPage()

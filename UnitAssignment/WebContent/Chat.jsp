@@ -22,7 +22,7 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href=""> Chat </a></li>
+					<li><a href="Chat.jsp" id="chat"> Chat </a></li>
 					<li><a href=""> About </a></li>
 				</ul>
 				

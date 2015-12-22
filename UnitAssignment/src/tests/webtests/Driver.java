@@ -1,5 +1,7 @@
 package tests.webtests;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 
@@ -10,7 +12,10 @@ public class Driver
     public static WebDriver getDriver()
     {
         if(driver==null)
+        {
             driver = new FirefoxDriver();
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        }
 
         return driver;
     }
