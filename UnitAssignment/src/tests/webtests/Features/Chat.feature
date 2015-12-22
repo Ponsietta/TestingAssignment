@@ -1,6 +1,5 @@
 Feature: Chat
 
-@Runme
 Scenario: Successful Login
 Given I am a user trying to log in
 When I login using valid credentials

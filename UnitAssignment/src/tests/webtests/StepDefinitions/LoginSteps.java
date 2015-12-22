@@ -41,7 +41,7 @@ public class LoginSteps
         login.LoginToChatInvalid();
     }
 
-    @When("^I send click on “Log out”$")
+    @When("^I send click on ?Log out?$")
     public void WhenISendClickOnLogOut()
     {
         login.LogOut();
