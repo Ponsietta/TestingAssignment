@@ -26,6 +26,11 @@ public class ChatSession
 			//details can be further verified here
 			return 1;
 		}
+		else
+		{
+			if(!username.equals("rebmar") || !password.equals("enternow"))
+				return 1;
+		}
 		
 		int result = provider.connect(username, password, s_friendID);
 		

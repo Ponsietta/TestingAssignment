@@ -37,8 +37,14 @@
 		<div class="row">
 			<div class="col-md-8">
 				<section id="loginForm">
-
+        
 				<hr />
+				
+				<% if("false".equals(request.getAttribute("loginsuccess")))
+					{ %>
+            			<div id="loginerror" style="color: red">Invalid login attempt</div>
+            			<br/>
+        		<% } %>
 
 				<form method="post" action="LogIn">
 					<div class="form-group">

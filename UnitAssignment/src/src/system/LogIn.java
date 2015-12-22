@@ -3,6 +3,7 @@ package src.system;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -59,9 +60,16 @@ public class LogIn extends HttpServlet {
 			 
 			 response.sendRedirect("Chat.jsp");
 		 }
-		 else {
+		 else 
+		 {
 			 if (result == 1)
-			    out.println ();
+			 {
+				 request.setAttribute("loginsuccess", "false");
+				 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+			     rd.forward(request, response);
+			     
+			     out.println ();
+			 }
 			 else if (result == 2)
 				 out.println ();
 		 }
