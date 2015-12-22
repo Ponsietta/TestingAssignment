@@ -85,7 +85,8 @@ public class SendMessageTest {
 	{
 		String message = "Fudge";
 		String parentlock = "true";
-
+		
+		when(provider.getMaxMessageLength()).thenReturn(50);
 	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
