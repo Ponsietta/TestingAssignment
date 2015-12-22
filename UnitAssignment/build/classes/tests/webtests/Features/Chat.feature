@@ -33,5 +33,5 @@ Examples:
 Scenario: Logging out
 Given I am a logged in user
 And I am on the chat page
-When I send click on “Log out”
+When I click on the logout button
 Then I should be logged out

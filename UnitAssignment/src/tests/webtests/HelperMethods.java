@@ -1,7 +1,7 @@
 package tests.webtests;
 import java.util.Random;
 
-public class HelperMethods 
+public abstract class HelperMethods 
 {
 	public static String GetRandomString()
     {

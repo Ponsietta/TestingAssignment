@@ -15,7 +15,7 @@ public class Login
 	WebDriver driver;
 
     private String loginPageLinkID = "loginLink";
-    private String logoutBtnID = "logoutButton";
+    private String logoutBtnID = "logoutForm";
     private String usernameID = "username";
     private String passwordID = "password";
     private String loginBtnID = "login";
@@ -55,7 +55,7 @@ public class Login
         try
         {
             //driver.findElement(By.id(loggedInUserID));
-        	driver.findElement(By.id("logoutForm"));
+        	driver.findElement(By.id(logoutBtnID));
             return true;
         }
         catch (org.openqa.selenium.NoSuchElementException e)
