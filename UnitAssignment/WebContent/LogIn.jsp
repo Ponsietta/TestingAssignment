@@ -25,7 +25,7 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="LogIn.jsp"> Login </a>
+					<li><a href="LogIn.jsp" id="loginLink"> Login </a>
 					<li>
 				</ul>
 			</div>
@@ -56,7 +56,7 @@
 					<div class="form-group">
 						<div class="col-md-2 control-label">Password</div>
 						<input class="form-control" type="password" name="password" id="password"
-							size="20px"> <br> <input class="btn btn-default"
+							size="20px"> <br> <input id="login" class="btn btn-default"
 							type="submit" value="Log In">
 					</div>
 				</form>

@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import src.system.ChatProvider;
-import src.system.ChatProviderStubTimeOut;
 import src.system.ChatSession;
 
 import static org.mockito.Mockito.*;
@@ -45,8 +44,11 @@ public class SendMessageTest {
 		String message = "This is my message";
 		String parentlock = "false";
 
-		ChatProvider chatProvider = new ChatProviderStubTimeOut();
-		ChatSession chatSession = new ChatSession(chatProvider);
+
+		when(provider.getMaxMessageLength()).thenReturn(50);
+		when(provider.connect("rebmar", "enternow")).thenReturn(2);
+		//ChatProvider chatProvider = new ChatProviderStubTimeOut();
+		//ChatSession chatSession = new ChatSession(chatProvider);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(1, result);
 	}
@@ -81,7 +83,7 @@ public class SendMessageTest {
 
 
 	@Test
-	public void sendParentLocked()
+	public void sendParentLockedFudge()
 	{
 		String message = "Fudge";
 		String parentlock = "true";
@@ -92,7 +94,34 @@ public class SendMessageTest {
 		assertEquals(4, result);
 
 	}
-	/*
+	
+	@Test
+	public void sendParentLockedPudding()
+	{
+		String message = "this includes pudding";
+		String parentlock = "true";
+		
+		when(provider.getMaxMessageLength()).thenReturn(50);
+	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
+		int result = chatSession.sendMessage(message, parentlock);
+		assertEquals(4, result);
+
+	}
+	
+	
+	@Test
+	public void sendParentLockedYikes()
+	{
+		String message = "yikes";
+		String parentlock = "true";
+		
+		when(provider.getMaxMessageLength()).thenReturn(50);
+	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
+		int result = chatSession.sendMessage(message, parentlock);
+		assertEquals(4, result);
+
+	}
+	
 
 	@Test
 	public void sendInvalidFriendID()
@@ -100,9 +129,10 @@ public class SendMessageTest {
 		String message = "This is my message for invalid friend ID.";
 		String parentlock = "true";
 
-	//	int result = chatSession.SendMessage(message, Convert.ToString(parentlock));
-		//Assert.AreEqual(5, result);
+		chatSession.initSession("rebmar", "enternow", "a");
+		int result = chatSession.sendMessage(message, parentlock);
+		assertEquals(5, result);
 	}
 
-*/
+
 }

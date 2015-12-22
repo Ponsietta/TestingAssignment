@@ -13,8 +13,8 @@ public class Login
 
     private String loginPageLinkID = "loginLink";
     private String logoutBtnID = "logoutButton";
-    private String usernameID = "Email";
-    private String passwordID = "Password";
+    private String usernameID = "username";
+    private String passwordID = "password";
     private String loginBtnID = "login";
     private String loggedInUserID = "loginCredential";
 

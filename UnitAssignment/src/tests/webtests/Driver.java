@@ -23,7 +23,7 @@ public class Driver
 
     public void NavigateToStartPage()
     {
-        driver.navigate().to("http://localhost:35834/");
+        driver.navigate().to("http://localhost:8080/UnitAssignment/LogIn.jsp");
     }
 
     public void Quit()

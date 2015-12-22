@@ -20,6 +20,19 @@ public class ChatSession
 	{
 		//this can be passed in and can change
 		
+		int i_friendID;
+		 
+ 		try
+ 		{
+ 			i_friendID = Integer.parseInt(s_friendID);
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			i_friendID = -1;
+ 		}
+ 
+ 		this.friendID = i_friendID;
+		
 		int result = provider.connect(username, password);
 		
         return result;
@@ -32,11 +45,9 @@ public class ChatSession
 			return 5;
 		}
 		
+		
 		boolean pLock;
-        if (parentlock == null)
-            pLock = false;
-        else
-            pLock = Boolean.parseBoolean(parentlock);
+        pLock = Boolean.parseBoolean(parentlock);
 
         //Text too short
         if (text == null || text.isEmpty())

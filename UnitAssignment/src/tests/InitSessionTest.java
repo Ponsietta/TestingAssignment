@@ -50,7 +50,7 @@ public class InitSessionTest {
 		String friend = "1";
 		
 		when(provider.connect(username, password)).thenReturn(1);
-		int result = chatSession.initSession("reb", "pass", "1");
+		int result = chatSession.initSession(username, password, friend);
 		
 		assertEquals(1, result);
 		
