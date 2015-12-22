@@ -7,18 +7,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import src.system.ChatProvider;
-import src.system.ChatProviderStubLongMessage;
-import src.system.ChatProviderStubSuccess;
 import src.system.ChatProviderStubTimeOut;
 import src.system.ChatSession;
+
+import static org.mockito.Mockito.*;
 
 public class SendMessageTest {
 
 	ChatSession chatSession;
+	ChatProvider provider = mock(ChatProvider.class);
 
 	@Before
 	public void setUp() throws Exception {
-		chatSession = new ChatSession(null);
+		chatSession = new ChatSession(provider);
 	}
 
 	@After
@@ -32,7 +33,8 @@ public class SendMessageTest {
 		String text = "Fudge";
 		String parentlock = "false";
 
-		ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
+		when(provider.getMaxMessageLength()).thenReturn(50);
+		//ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(text, parentlock);
 		assertEquals(0, result);
 	}
@@ -56,8 +58,9 @@ public class SendMessageTest {
 				"ThisIsALongMessageOver50CharsThisIsALongMessageOver50CharsThisIsALongMessageOver50Chars";
 		String parentlock = "false";
 
-		ChatProvider chatProvider = new ChatProviderStubLongMessage();
-		ChatSession chatSession = new ChatSession(chatProvider);
+//		ChatProvider chatProvider = new ChatProviderStubLongMessage();
+//		ChatSession chatSession = new ChatSession(chatProvider);
+		when(provider.getMaxMessageLength()).thenReturn(25);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(2, result);
 
@@ -83,7 +86,7 @@ public class SendMessageTest {
 		String message = "Fudge";
 		String parentlock = "true";
 
-		ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
+	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
 

@@ -20,27 +20,20 @@ public class ChatSession
 	{
 		//this can be passed in and can change
 		
-		int result = provider.connect(username, password, s_friendID);
+		if (username == null || username.trim() == "" || password == null || password.trim() == "" 
+				|| s_friendID == null || s_friendID.trim() == "")
+		{
+			//details can be further verified here
+			return 1;
+		}
 		
-//		int i_friendID;
-//
-//		try
-//		{
-//			i_friendID = Integer.parseInt(s_friendID);
-//		}
-//		catch (Exception e)
-//		{
-//			i_friendID = -1;
-//		}
-//
-//		this.friendID = i_friendID;
+		int result = provider.connect(username, password, s_friendID);
 		
         return result;
 	}
 	
 	public int sendMessage(String text, String parentlock)
 	{
-		//String censoredText = checkNaughtyWords(text);
 		
 		if (friendID < 0){
 			return 5;
