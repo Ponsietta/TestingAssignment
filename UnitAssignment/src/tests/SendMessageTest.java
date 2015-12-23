@@ -5,11 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import src.system.ChatProvider;
 import src.system.ChatSession;
 
 import static org.mockito.Mockito.*;
+
+import java.util.concurrent.TimeoutException;
 
 public class SendMessageTest {
 
@@ -45,11 +49,15 @@ public class SendMessageTest {
 		String parentlock = "false";
 
 
-		when(provider.getMaxMessageLength()).thenReturn(50);
-		when(provider.connect("rebmar", "enternow")).thenReturn(2);
+		when(provider.getMaxMessageLength()).thenReturn(50);	
+		
+		//TODO SOLVE
+	    
 		//ChatProvider chatProvider = new ChatProviderStubTimeOut();
 		//ChatSession chatSession = new ChatSession(chatProvider);
+		
 		int result = chatSession.sendMessage(message, parentlock);
+
 		assertEquals(1, result);
 	}
 
