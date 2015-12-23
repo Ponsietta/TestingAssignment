@@ -11,7 +11,7 @@ public class Driver
 
     public static WebDriver getDriver()
     {
-        if(driver==null)
+        if(driver==null || driver.toString().contains("null"))
         {
             driver = new FirefoxDriver();
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

@@ -16,7 +16,7 @@ public class CommonSteps
         commonDriver.NavigateToStartPage();
     }
 
-    //@After
+    @After
     public void TearDown()
     {
         commonDriver.Quit();

@@ -1,9 +1,7 @@
 package tests.webtests.PageObjects;
 
-import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import java.util.NoSuchElementException;
 
 public class Chat 
 {
@@ -44,15 +42,8 @@ public class Chat
 
     public void CheckThatOnChatPage()
     {
-        try
-        {
-            driver.findElement(By.xpath("//div[@class='panel-heading'][contains(text(), 'RECENT CHAT HISTORY')]"));
-            assertTrue(true);
-        }
-        catch (NoSuchElementException e)
-        {
-            assertTrue(false);
-        }
+    	driver.findElement(By.xpath("//div[@class='panel-heading'][contains(text(), 'RECENT CHAT HISTORY')]"));
+        assertTrue(true);
     }
 
     public void CheckErrorMessage()
