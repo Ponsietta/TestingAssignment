@@ -3,12 +3,19 @@ package src.system;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeoutException;
 
 public class ChatSession 
 {
 	public List<ChatMessage> receivedMessages; 
 	private ChatProvider provider;
-	private int friendID;
+	private String friendID;
 	
 	public ChatSession(ChatProvider provider)
 	{
@@ -17,35 +24,39 @@ public class ChatSession
 	}
 
 	public int initSession(String username, String password, String s_friendID)
-	{
-		//this can be passed in and can change
-		
-		int i_friendID;
-		 
- 		try
+	{		
+		this.friendID = s_friendID;		
+ 		
+ 		ExecutorService executor = Executors.newCachedThreadPool();
+ 		Callable<Object> task = new Callable<Object>() {
+ 		   public Object call() {
+ 		      return provider.connect(username, password);
+ 		   }
+ 		};
+ 		
+ 		Future<Object> future = executor.submit(task);
+ 		try 
  		{
- 			i_friendID = Integer.parseInt(s_friendID);
- 		}
- 		catch (Exception e)
+ 			return (int)future.get(5, TimeUnit.SECONDS); 
+ 		} 
+ 		catch (TimeoutException ex) 
  		{
- 			i_friendID = -1;
+ 			return 2;
  		}
- 
- 		this.friendID = i_friendID;
+ 		catch (InterruptedException e) {
+ 		   // handle the interrupts
+ 		} catch (ExecutionException e) {
+ 		   // handle other exceptions
+ 		}
+ 		finally{
+ 			future.cancel(true);
+ 		}		
 		
-		int result = provider.connect(username, password);
-		
-        return result;
+ 		return 0;
 	}
 	
 	public int sendMessage(String text, String parentlock)
-	{
-		
-		if (friendID < 0){
-			return 5;
-		}
-		
-		
+	{		
 		boolean pLock;
         pLock = Boolean.parseBoolean(parentlock);
 
@@ -66,11 +77,44 @@ public class ChatSession
             {
                 return 4;
             }
-        }           
+        }       
         
-        provider.onMessageReceived(text);
-        return 0;
-	
+        int result=-1;
+        
+        ExecutorService executor = Executors.newCachedThreadPool();
+ 		Callable<Object> task = new Callable<Object>() {
+ 		   public Object call() {
+ 		      return provider.sendMessageTo(friendID, text);
+ 		   }
+ 		};
+ 		
+ 		Future<Object> future = executor.submit(task);
+ 		try 
+ 		{
+ 			result = (int)future.get(5, TimeUnit.SECONDS); 
+ 		} 
+ 		catch (TimeoutException ex) 
+ 		{
+ 			return 1;
+ 		}
+ 		catch (InterruptedException e) 
+ 		{
+ 		   return -1;
+ 		} 
+ 		catch (ExecutionException e) 
+ 		{
+ 		   return -1;
+ 		}
+ 		finally{
+ 			future.cancel(true);
+ 		}
+ 		
+ 		if(result==0)
+ 			return 0;
+ 		else if(result==1)
+ 			return 5;
+        
+        return -1;	
 	}
 	
 	public void onMessageRecieved(String text)

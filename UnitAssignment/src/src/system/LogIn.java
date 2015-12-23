@@ -40,13 +40,11 @@ public class LogIn extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		 String username = request.getParameter("username");   
 		 String password = request.getParameter("password");
-		 String friendID = "1";
-		 
+		 String friendID = "1";		 
 		 
 		 ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		 int result = chatSession.initSession(username, password, friendID);
@@ -71,7 +69,13 @@ public class LogIn extends HttpServlet {
 			     out.println ();
 			 }
 			 else if (result == 2)
-				 out.println ();
+			 {
+				 request.setAttribute("providerfailure", "true");
+				 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+			     rd.forward(request, response);
+			     
+			     out.println ();
+			 }				
 		 }
 		 
 	}

@@ -44,6 +44,11 @@
 					{ %>
             			<div id="loginerror" style="color: red">Invalid login attempt</div>
             			<br/>
+        		<% }
+				   else if("true".equals(request.getAttribute("providerfailure")))
+				   {%>
+				   		<div id="providererror" style="color: red">Provider timed out</div>
+            			<br/>
         		<% } %>
 
 				<form method="post" action="LogIn">

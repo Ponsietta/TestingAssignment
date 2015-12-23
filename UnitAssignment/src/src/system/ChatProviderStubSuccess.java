@@ -33,6 +33,12 @@ public class ChatProviderStubSuccess implements ChatProvider
 	@Override
 	public int connect(String username, String password) 
 	{
+		try {
+			Thread.sleep(6000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (username == null || username.trim() == "" || password == null || password.trim() == "" 
 		|| !username.equals("rebmar") || !password.equals("enternow"))
 		{
