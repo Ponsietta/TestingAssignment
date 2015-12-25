@@ -1,6 +1,6 @@
-package tests.webtests.StepDefinitions;
-import tests.webtests.*;
+package tests.web_tests.StepDefinitions;
 import cucumber.api.java.Before;
+import tests.web_tests.*;
 import cucumber.api.java.After;
 
 public class CommonSteps 

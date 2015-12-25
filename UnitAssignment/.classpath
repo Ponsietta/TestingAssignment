@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="jars/objenesis-2.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jars/gherkin-2.12.2.jar"/>
+	<classpathentry kind="lib" path="jars/modeljunit-2.5-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -1,4 +1,4 @@
-package tests;
+package tests.unit_tests;
 
 import static org.junit.Assert.*;
 
@@ -51,8 +51,6 @@ public class SendMessageTest {
 
 		when(provider.getMaxMessageLength()).thenReturn(50);	
 		
-		//TODO SOLVE
-	    
 		//ChatProvider chatProvider = new ChatProviderStubTimeOut();
 		//ChatSession chatSession = new ChatSession(chatProvider);
 		

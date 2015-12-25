@@ -1,4 +1,4 @@
-package tests.webtests;
+package tests.web_tests;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,7 +1,7 @@
-package tests.webtests.StepDefinitions;
+package tests.web_tests.StepDefinitions;
 
-import tests.webtests.PageObjects.*;
-import tests.webtests.*;
+import tests.web_tests.*;
+import tests.web_tests.PageObjects.*;
 import cucumber.api.java.en.*;
 
 public class ChatSteps 

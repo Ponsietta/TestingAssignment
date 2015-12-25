@@ -1,14 +1,14 @@
-package tests.webtests.PageObjects;
+package tests.web_tests.PageObjects;
 
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import tests.web_tests.*;
+
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
-
-import tests.webtests.*;
 
 public class Login 
 {

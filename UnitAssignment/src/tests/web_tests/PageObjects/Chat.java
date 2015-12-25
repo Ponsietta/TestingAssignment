@@ -1,4 +1,4 @@
-package tests.webtests.PageObjects;
+package tests.web_tests.PageObjects;
 
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
