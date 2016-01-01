@@ -106,9 +106,23 @@
                     + "${username}" + " | "
                     + new Date().toLocaleString() + "</small>"
                     + "<hr /> </div> </div></div> </li> ";
-
                
                 document.getElementById("media-list").innerHTML += htmlcode;
+                
+                $.post('Reply', null, function (res) {
+                	var htmlcode = "<li class=\"media\"> <div class=\"media-body\"> <div class=\"media\">"
+                        + "<a class=\"pull-right\" href=\"#\"> <img class=\"media-object img-circle "
+                        + "src=\"~/Content/img/user.png\" /> </a><div class=\"media-body\"> "
+                        + res
+                        + "<br /><small class=\"text-muted\">"
+                        + "${username}" + " | "
+                        + new Date().toLocaleString()  + "</small>"
+                        + "<hr /> </div> </div></div> </li> ";
+                        
+                	document.getElementById("media-list").innerHTML += htmlcode;
+                });
+                
+                
             }
             else if (res==4) {
                alert("No naughty words please!");

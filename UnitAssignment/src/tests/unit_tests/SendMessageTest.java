@@ -9,6 +9,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import src.system.ChatProvider;
+import src.system.ChatProviderStubTimeOut;
 import src.system.ChatSession;
 
 import static org.mockito.Mockito.*;
@@ -48,13 +49,12 @@ public class SendMessageTest {
 		String message = "This is my message";
 		String parentlock = "false";
 
-
 		when(provider.getMaxMessageLength()).thenReturn(50);	
 		
-		//ChatProvider chatProvider = new ChatProviderStubTimeOut();
-		//ChatSession chatSession = new ChatSession(chatProvider);
+		ChatProvider chatProvider = new ChatProviderStubTimeOut();
+		ChatSession chatSess = new ChatSession(chatProvider);
 		
-		int result = chatSession.sendMessage(message, parentlock);
+		int result = chatSess.sendMessage(message, parentlock);
 
 		assertEquals(1, result);
 	}

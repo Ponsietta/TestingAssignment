@@ -36,7 +36,7 @@ public class InitSessionTest {
 		String friend = "1";
 		
 		when(provider.connect(username, password)).thenReturn(0);
-		int result = chatSession.initSession("reb", "pass", "1");
+		int result = chatSession.initSession("reb", "pass", friend);
 		
 		assertEquals(0, result);
 		
@@ -63,7 +63,7 @@ public class InitSessionTest {
 		String friend = "1";
 		
 		when(provider.connect(username, password)).thenReturn(2);
-		int result = chatSession.initSession("reb", "pass", "1");
+		int result = chatSession.initSession("reb", "pass", friend);
 		
 		assertEquals(2, result);
 	}

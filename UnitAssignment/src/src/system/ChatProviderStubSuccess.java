@@ -1,5 +1,7 @@
 package src.system;
 
+import javax.servlet.http.HttpSession;
+
 public class ChatProviderStubSuccess implements ChatProvider 
 {
 	
@@ -24,10 +26,18 @@ public class ChatProviderStubSuccess implements ChatProvider
 	}
 
 	@Override
-	public void onMessageReceived(String text) 
+	public String onMessageReceived(String text) 
 	{
-		// TODO Auto-generated method stub
+		try 
+		{
+			Thread.sleep(2000);	
+		} 
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
 		
+		return text;
 	}
 
 	@Override

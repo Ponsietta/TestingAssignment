@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class SendMessage
+ * Servlet implementation class Reply
  */
-@WebServlet("/SendMessage")
-public class SendMessage extends HttpServlet {
+@WebServlet("/Reply")
+public class Reply extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SendMessage() {
+    public Reply() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,16 +36,14 @@ public class SendMessage extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		 String message = request.getParameter("chatmessage");   
-		 String lock = request.getParameter("parentalLock");
 		 
 		 HttpSession session = request.getSession();
 		 ChatSession chatSession = (ChatSession) session.getAttribute("chatSession");
-		 int result = chatSession.sendMessage(message, lock);
+		 chatSession.onMessageRecieved(chatSession.provider.onMessageReceived("Thank you!"));
 		 
+		 ChatMessage rec = chatSession.receivedMessages.get(chatSession.receivedMessages.size()-1);
 		 PrintWriter out = response.getWriter();
-		 out.println(result);
+		 out.println(rec.content);
 		
 	}
 

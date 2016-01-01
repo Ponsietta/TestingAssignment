@@ -13,14 +13,10 @@ private String username = null;
 	@Override
 	public int sendMessageTo(String friendID, String msg) 
 	{
-//		try {
-//			Thread.sleep(5500);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		
+		try {
+			Thread.sleep(5500);
+		} catch (InterruptedException e) {}
+	
 		if(friendID == null)
 			return 1;
 		
@@ -31,10 +27,9 @@ private String username = null;
 	}
 
 	@Override
-	public void onMessageReceived(String text) 
+	public String onMessageReceived(String text) 
 	{
-		// TODO Auto-generated method stub
-		
+		return text;
 	}
 
 	@Override

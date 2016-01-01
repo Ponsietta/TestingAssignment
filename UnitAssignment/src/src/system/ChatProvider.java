@@ -9,7 +9,7 @@ public interface ChatProvider
 	
 	public int sendMessageTo(String friendID, String msg);
 	
-	public void onMessageReceived(String text);
+	public String onMessageReceived(String text);
 	
     int getMaxMessageLength();
 

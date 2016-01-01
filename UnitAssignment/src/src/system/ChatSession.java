@@ -14,7 +14,7 @@ import java.util.concurrent.TimeoutException;
 public class ChatSession 
 {
 	public List<ChatMessage> receivedMessages; 
-	private ChatProvider provider;
+	public ChatProvider provider;
 	private String friendID;
 	
 	public ChatSession(ChatProvider provider)
