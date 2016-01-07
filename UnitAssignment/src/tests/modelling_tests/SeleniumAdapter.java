@@ -35,6 +35,14 @@ public class SeleniumAdapter {
 		loginSteps.ThenIShouldRemainOnTheLoginPage();
 	}
 	
+	public void SendMessageValid()
+	{
+		loginSteps.GivenIAmALoggedInUser();
+		chatSteps.GivenIAmOnTheChatPage();
+		chatSteps.WhenISendAValidMessage();
+		chatSteps.ThenTheMessageShouldAppearInMyChatWindow();
+	}
+	
 	public void SendMessageTriggerParentalLock()
 	{
 		loginSteps.GivenIAmALoggedInUser();
