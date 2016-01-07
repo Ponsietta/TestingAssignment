@@ -52,6 +52,7 @@ public class KellimniModel implements FsmModel
     	return currState == KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
+    @Action
     public void logOut(){
     	sAdapter.logout();	
     }
