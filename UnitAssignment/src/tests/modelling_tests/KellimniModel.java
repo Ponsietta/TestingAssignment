@@ -1,6 +1,6 @@
 package tests.modelling_tests;
 import net.sourceforge.czt.modeljunit.FsmModel;
-import net.sourceforge.czt.modeljunit.RandomTester;
+import net.sourceforge.czt.modeljunit.GreedyTester;
 import net.sourceforge.czt.modeljunit.StopOnFailureListener;
 import net.sourceforge.czt.modeljunit.VerboseListener;
 import net.sourceforge.czt.modeljunit.coverage.ActionCoverage;
@@ -33,7 +33,13 @@ public class KellimniModel implements FsmModel
     @Action
     public void loginInvalid(){
     	sAdapter.loginInvalid();
-    	//currState = KellimniModelStates.SHOW_LOGIN_PAGE;
+    	loginInvalidCount++;
+    	
+    	if(loginInvalidCount==3)
+    	{
+    		currState = KellimniModelStates.LOCKED;
+    		loginInvalidCount = 0;
+    	}
     }
     
     public boolean loginInvalidGuard(){
@@ -53,6 +59,13 @@ public class KellimniModel implements FsmModel
     @Action 
 	public void sendMessageInvalid(){
     	sAdapter.SendMessageTriggerParentalLock();
+    	parentalLockTriggerCount++;
+    	
+    	if(parentalLockTriggerCount>5)
+    	{
+    		sAdapter.logout();
+    		currState = KellimniModelStates.SHOW_LOGIN_PAGE;
+    	}
     	currState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
@@ -87,7 +100,7 @@ public class KellimniModel implements FsmModel
 	
 	public static void main(String[] argv) {
 		KellimniModel model = new KellimniModel();
-		RandomTester tester = new RandomTester(model);
+		GreedyTester tester = new GreedyTester(model);
 		tester.buildGraph();
         tester.addListener(new VerboseListener());
         tester.addListener(new StopOnFailureListener());
