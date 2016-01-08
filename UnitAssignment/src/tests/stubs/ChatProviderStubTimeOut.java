@@ -1,11 +1,10 @@
-package src.system;
+package tests.stubs;
 
-import javax.servlet.http.HttpSession;
+import src.system.ChatProvider;
 
-public class ChatProviderStubSuccess implements ChatProvider 
-{
-	
-	private String username = null;
+public class ChatProviderStubTimeOut implements ChatProvider {
+
+private String username = null;
 	
 	@Override
 	public String getName() 
@@ -16,6 +15,10 @@ public class ChatProviderStubSuccess implements ChatProvider
 	@Override
 	public int sendMessageTo(String friendID, String msg) 
 	{
+		try {
+			Thread.sleep(5500);
+		} catch (InterruptedException e) {}
+	
 		if(friendID == null)
 			return 1;
 		
@@ -28,15 +31,6 @@ public class ChatProviderStubSuccess implements ChatProvider
 	@Override
 	public String onMessageReceived(String text) 
 	{
-		try 
-		{
-			Thread.sleep(2000);	
-		} 
-		catch (InterruptedException e) 
-		{
-			e.printStackTrace();
-		}
-		
 		return text;
 	}
 
@@ -44,6 +38,13 @@ public class ChatProviderStubSuccess implements ChatProvider
 	public int connect(String username, String password) 
 	{
 
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 		if (username == null || username.trim() == "" || password == null || password.trim() == "" 
 		|| !username.equals("rebmar") || !password.equals("enternow"))
 		{

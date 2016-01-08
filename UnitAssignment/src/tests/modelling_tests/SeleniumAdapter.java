@@ -1,5 +1,4 @@
 package tests.modelling_tests;
-import java.util.concurrent.TimeUnit;
 import tests.web_tests.StepDefinitions.*;
 
 public class SeleniumAdapter {

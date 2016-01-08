@@ -9,8 +9,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import src.system.ChatProvider;
-import src.system.ChatProviderStubTimeOut;
 import src.system.ChatSession;
+import tests.stubs.ChatProviderStubTimeOut;
 
 import static org.mockito.Mockito.*;
 

@@ -1,8 +1,11 @@
-package src.system;
+package tests.stubs;
 
-public class ChatProviderStubTimeOut implements ChatProvider {
+import src.system.ChatProvider;
 
-private String username = null;
+public class ChatProviderStubSuccess implements ChatProvider 
+{
+	
+	private String username = null;
 	
 	@Override
 	public String getName() 
@@ -13,10 +16,6 @@ private String username = null;
 	@Override
 	public int sendMessageTo(String friendID, String msg) 
 	{
-		try {
-			Thread.sleep(5500);
-		} catch (InterruptedException e) {}
-	
 		if(friendID == null)
 			return 1;
 		
@@ -29,6 +28,15 @@ private String username = null;
 	@Override
 	public String onMessageReceived(String text) 
 	{
+		try 
+		{
+			Thread.sleep(2000);	
+		} 
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
+		
 		return text;
 	}
 
@@ -36,13 +44,6 @@ private String username = null;
 	public int connect(String username, String password) 
 	{
 
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
 		if (username == null || username.trim() == "" || password == null || password.trim() == "" 
 		|| !username.equals("rebmar") || !password.equals("enternow"))
 		{
