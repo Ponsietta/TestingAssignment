@@ -80,7 +80,7 @@ public class KellimniModel implements FsmModel
     }
     
     public boolean logOutGuard(){
-    	return currState == KellimniModelStates.LOCKED || currState == KellimniModelStates.SHOW_CHAT_PAGE;
+    	return currState == KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
 	@Override
