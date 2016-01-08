@@ -79,6 +79,7 @@ public class KellimniModel implements FsmModel
     	
     	if(parentalLockTriggerCount>5)
     	{
+    		System.out.println("Lock that bitch!");
     		sAdapter.logout();
     		parentalLockTriggerCount =0;
     		pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
@@ -111,11 +112,15 @@ public class KellimniModel implements FsmModel
 
 	@Override
 	public void reset(boolean arg0) 
-	{		
-		pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
-		
+	{				
+		//TODO MUST LOG OUT IN RESET OTHERWISE THERE WILL BE PROBLEMS LOGGING IN
 		if (arg0)
-			sAdapter.reset();
+		{
+			//TODO needs editing
+			//sAdapter.reset();
+			sAdapter.logout();
+			pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
+		}
 	}
 	
 	public static void main(String[] argv) {

@@ -25,7 +25,6 @@ public class Driver
         driver.manage().window().maximize();
     }
 
-
     public void NavigateToStartPage()
     {
         driver.navigate().to("http://localhost:8080/UnitAssignment/LogIn.jsp");
@@ -33,6 +32,6 @@ public class Driver
 
     public void Quit()
     {
-        driver.quit();
+    	driver.quit();
     }
 }

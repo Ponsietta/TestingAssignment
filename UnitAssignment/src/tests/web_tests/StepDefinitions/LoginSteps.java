@@ -16,6 +16,10 @@ public class LoginSteps
     @Given("^I am a user trying to log in$")
     public void GivenIAmAUserTryingToLogIn()
     {
+    	//TODO check if below if loop works well
+    	//if (login.CheckLoggedIn())
+    		//login.LogOut();
+    	
         login.GoToLoginPage();
     }
 

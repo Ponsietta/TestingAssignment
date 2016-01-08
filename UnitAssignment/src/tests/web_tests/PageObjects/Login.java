@@ -62,7 +62,6 @@ public class Login
         {
             return false;
         }
-
     }
 
     public void CheckLoggedOut()
