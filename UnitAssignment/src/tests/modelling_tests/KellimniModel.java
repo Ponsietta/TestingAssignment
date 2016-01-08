@@ -22,6 +22,7 @@ public class KellimniModel implements FsmModel
     public void loginValid() 
 	{
 		sAdapter.loginValid();
+		currState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
 	
     public boolean loginValidGuard() 
@@ -32,6 +33,7 @@ public class KellimniModel implements FsmModel
     @Action
     public void loginInvalid(){
     	sAdapter.loginInvalid();
+    	//currState = KellimniModelStates.SHOW_LOGIN_PAGE;
     }
     
     public boolean loginInvalidGuard(){
@@ -41,6 +43,7 @@ public class KellimniModel implements FsmModel
     @Action 
     public void sendMessageValid(){
     	sAdapter.SendMessageValid();
+    	currState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     public boolean sendMessageValidGuard(){
@@ -50,6 +53,7 @@ public class KellimniModel implements FsmModel
     @Action 
 	public void sendMessageInvalid(){
     	sAdapter.SendMessageTriggerParentalLock();
+    	currState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     public boolean sendMessageInvalidGuard(){
@@ -59,10 +63,11 @@ public class KellimniModel implements FsmModel
     @Action
     public void logOut(){
     	sAdapter.logout();	
+    	currState = KellimniModelStates.SHOW_LOGIN_PAGE;
     }
     
     public boolean logOutGuard(){
-    	return currState == KellimniModelStates.LOCKED;
+    	return currState == KellimniModelStates.LOCKED || currState == KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
 	@Override
