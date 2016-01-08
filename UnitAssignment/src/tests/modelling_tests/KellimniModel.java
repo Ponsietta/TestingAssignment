@@ -14,6 +14,10 @@ public class KellimniModel implements FsmModel
 	
 	private KellimniModelStates currState = KellimniModelStates.SHOW_LOGIN_PAGE;
 	
+	int parentalLockTriggerCount = 0;
+	int loginInvalidCount = 0;
+	int messagesSentCount = 0;
+	
 	@Action
     public void loginValid() 
 	{

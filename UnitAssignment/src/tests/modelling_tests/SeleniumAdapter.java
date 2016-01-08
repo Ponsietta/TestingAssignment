@@ -16,8 +16,8 @@ public class SeleniumAdapter {
 	//not sure if we need below method.. could be
 	public void reset() 
 	{
-	      commonSteps.TearDown();
-	      commonSteps.StartUp();
+	      //commonSteps.TearDown();
+	      //commonSteps.StartUp();
 	}
 	
 	public void loginValid()
