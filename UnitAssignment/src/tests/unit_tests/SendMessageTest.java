@@ -136,6 +136,9 @@ public class SendMessageTest {
 		String parentlock = "true";
 
 		chatSession.initSession("rebmar", "enternow", "a");
+		when(provider.getMaxMessageLength()).thenReturn(50);
+		when(provider.sendMessageTo("a", message)).thenReturn(1);
+		
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(5, result);
 	}
