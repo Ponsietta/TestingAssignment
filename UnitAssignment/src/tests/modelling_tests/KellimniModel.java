@@ -19,6 +19,11 @@ public class KellimniModel implements FsmModel
 	int loginInvalidCount = 0;
 	int messagesSentCount = 0;	
 	
+	int loginTimerDisable = 30000;
+	int loginTimerDuration = 60000;
+	long loginTimerStartedAt = 0;
+	long timeDisabled = 0;
+	
 	@Action
     public void loginValid() 
 	{
@@ -28,17 +33,27 @@ public class KellimniModel implements FsmModel
 	
     public boolean loginValidGuard() 
     {
+    	if(accountState == KellimniModelStates.LOCKED && System.currentTimeMillis()-timeDisabled<30000)
+    		accountState = KellimniModelStates.UNLOCKED;
     	return accountState == KellimniModelStates.UNLOCKED && pageState == KellimniModelStates.SHOW_LOGIN_PAGE;
     }
     
     @Action
     public void loginInvalid(){
+    	
     	sAdapter.loginInvalid();
+    	//if the timer hasnt been set yet, set it.
+    	if (loginTimerStartedAt == 0)
+    		loginTimerStartedAt = System.currentTimeMillis();
+    		
+    	
     	loginInvalidCount++;
     	
-    	if(loginInvalidCount==3)
+    	if(loginInvalidCount==3 && System.currentTimeMillis()-loginTimerStartedAt<60000)
     	{
-    		pageState = KellimniModelStates.LOCKED;
+    		loginTimerStartedAt = 0;
+    		timeDisabled = System.currentTimeMillis();
+    		accountState = KellimniModelStates.LOCKED;
     		loginInvalidCount = 0;
     	}
     }
@@ -65,7 +80,9 @@ public class KellimniModel implements FsmModel
     	if(parentalLockTriggerCount>5)
     	{
     		sAdapter.logout();
+    		parentalLockTriggerCount =0;
     		pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
+    		accountState = KellimniModelStates.LOCKED;
     	}
     	pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
