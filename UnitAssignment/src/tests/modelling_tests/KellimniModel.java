@@ -12,22 +12,23 @@ public class KellimniModel implements FsmModel
 {
 	private SeleniumAdapter sAdapter = new SeleniumAdapter();
 	
-	private KellimniModelStates currState = KellimniModelStates.SHOW_LOGIN_PAGE;
+	private KellimniModelStates pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
+	private KellimniModelStates accountState = KellimniModelStates.UNLOCKED;
 	
 	int parentalLockTriggerCount = 0;
 	int loginInvalidCount = 0;
-	int messagesSentCount = 0;
+	int messagesSentCount = 0;	
 	
 	@Action
     public void loginValid() 
 	{
 		sAdapter.loginValid();
-		currState = KellimniModelStates.SHOW_CHAT_PAGE;
+		pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
 	
     public boolean loginValidGuard() 
     {
-    	return currState == KellimniModelStates.SHOW_LOGIN_PAGE;
+    	return accountState == KellimniModelStates.UNLOCKED && pageState == KellimniModelStates.SHOW_LOGIN_PAGE;
     }
     
     @Action
@@ -37,23 +38,23 @@ public class KellimniModel implements FsmModel
     	
     	if(loginInvalidCount==3)
     	{
-    		currState = KellimniModelStates.LOCKED;
+    		pageState = KellimniModelStates.LOCKED;
     		loginInvalidCount = 0;
     	}
     }
     
     public boolean loginInvalidGuard(){
-    	return currState == KellimniModelStates.SHOW_LOGIN_PAGE;
+    	return pageState == KellimniModelStates.SHOW_LOGIN_PAGE;
     }
     
     @Action 
     public void sendMessageValid(){
     	sAdapter.SendMessageValid();
-    	currState = KellimniModelStates.SHOW_CHAT_PAGE;
+    	pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     public boolean sendMessageValidGuard(){
-    	return currState == KellimniModelStates.SHOW_CHAT_PAGE;
+    	return pageState == KellimniModelStates.SHOW_CHAT_PAGE && messagesSentCount<=10;
     }
     
     @Action 
@@ -64,35 +65,37 @@ public class KellimniModel implements FsmModel
     	if(parentalLockTriggerCount>5)
     	{
     		sAdapter.logout();
-    		currState = KellimniModelStates.SHOW_LOGIN_PAGE;
+    		pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
     	}
-    	currState = KellimniModelStates.SHOW_CHAT_PAGE;
+    	pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     public boolean sendMessageInvalidGuard(){
-    	return currState == KellimniModelStates.SHOW_CHAT_PAGE;
+    	return pageState == KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     @Action
     public void logOut(){
     	sAdapter.logout();	
-    	currState = KellimniModelStates.SHOW_LOGIN_PAGE;
+    	pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
+    	messagesSentCount = 0;
+    	parentalLockTriggerCount = 0;
     }
     
     public boolean logOutGuard(){
-    	return currState == KellimniModelStates.SHOW_CHAT_PAGE;
+    	return pageState == KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
 	@Override
 	public Object getState() 
 	{		
-		return currState;
+		return pageState;
 	}
 
 	@Override
 	public void reset(boolean arg0) 
 	{		
-		currState = KellimniModelStates.SHOW_LOGIN_PAGE;
+		pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
 		
 		if (arg0)
 			sAdapter.reset();
@@ -107,7 +110,14 @@ public class KellimniModel implements FsmModel
         tester.addCoverageMetric(new TransitionCoverage());
         tester.addCoverageMetric(new StateCoverage());
         tester.addCoverageMetric(new ActionCoverage());
-        tester.generate(20);
+        
+        long startTime = System.currentTimeMillis();
+        
+        //do{
+        	tester.generate(30);
+        
+        //}while(System.currentTimeMillis()-startTime<900000);
+        
         tester.printCoverage();
 	}
 
