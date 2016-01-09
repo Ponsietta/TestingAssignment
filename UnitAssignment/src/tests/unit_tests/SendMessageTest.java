@@ -102,6 +102,20 @@ public class SendMessageTest {
 	}
 	
 	@Test
+	public void sendNotParentLockedFudge()
+	{
+		String message = "Fudge";
+		String parentlock = "false";
+		
+		when(provider.getMaxMessageLength()).thenReturn(50);
+	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
+		int result = chatSession.sendMessage(message, parentlock);
+		assertEquals(0, result);
+
+	}
+	
+	
+	@Test
 	public void sendParentLockedPudding()
 	{
 		String message = "this includes pudding";
