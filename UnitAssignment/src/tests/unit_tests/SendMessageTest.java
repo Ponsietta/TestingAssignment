@@ -27,7 +27,7 @@ public class SendMessageTest {
 	@Test
 	public void sendSuccess()
 	{
-		String text = "Fudge";
+		String text = "this is a normal message";
 		String parentlock = "false";
 
 		when(provider.getMaxMessageLength()).thenReturn(50);
@@ -41,13 +41,9 @@ public class SendMessageTest {
 		String message = "This is my message";
 		String parentlock = "false";
 
-		when(provider.getMaxMessageLength()).thenReturn(50);	
-		
 		ChatProvider chatProvider = new ChatProviderStubTimeOut();
 		ChatSession chatSess = new ChatSession(chatProvider);
-		
 		int result = chatSess.sendMessage(message, parentlock);
-
 		assertEquals(1, result);
 	}
 
@@ -61,7 +57,6 @@ public class SendMessageTest {
 		when(provider.getMaxMessageLength()).thenReturn(25);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(2, result);
-
 	}
 
 	@Test
@@ -72,7 +67,6 @@ public class SendMessageTest {
 		
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(3, result);
-
 	}
 
 
@@ -85,7 +79,6 @@ public class SendMessageTest {
 		when(provider.getMaxMessageLength()).thenReturn(50);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
-
 	}
 	
 	@Test
@@ -97,7 +90,6 @@ public class SendMessageTest {
 		when(provider.getMaxMessageLength()).thenReturn(50);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(0, result);
-
 	}
 	
 	
@@ -110,7 +102,6 @@ public class SendMessageTest {
 		when(provider.getMaxMessageLength()).thenReturn(50);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
-
 	}
 	
 	
@@ -123,7 +114,6 @@ public class SendMessageTest {
 		when(provider.getMaxMessageLength()).thenReturn(50);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
-
 	}
 	
 
@@ -140,6 +130,4 @@ public class SendMessageTest {
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(5, result);
 	}
-
-
 }
