@@ -7,3 +7,5 @@ public enum KellimniModelStates {
 	UNLOCKED,
 	SENDING_MESSAGE
 }
+
+

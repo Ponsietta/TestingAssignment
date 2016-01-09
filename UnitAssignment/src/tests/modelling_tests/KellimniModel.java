@@ -63,7 +63,9 @@ public class KellimniModel implements FsmModel
     }
     
     @Action 
-    public void sendMessageValid(){
+    public void sendMessageValid()
+    {
+    	pageState = KellimniModelStates.SENDING_MESSAGE;
     	sAdapter.SendMessageValid();
     	pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }

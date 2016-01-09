@@ -1,20 +1,13 @@
 package tests.unit_tests;
 
 import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import src.system.ChatProvider;
 import src.system.ChatSession;
 import tests.stubs.ChatProviderStubTimeOut;
-
 import static org.mockito.Mockito.*;
-
-import java.util.concurrent.TimeoutException;
 
 public class SendMessageTest {
 
@@ -38,7 +31,6 @@ public class SendMessageTest {
 		String parentlock = "false";
 
 		when(provider.getMaxMessageLength()).thenReturn(50);
-		//ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(text, parentlock);
 		assertEquals(0, result);
 	}
@@ -66,8 +58,6 @@ public class SendMessageTest {
 				"ThisIsALongMessageOver50CharsThisIsALongMessageOver50CharsThisIsALongMessageOver50Chars";
 		String parentlock = "false";
 
-//		ChatProvider chatProvider = new ChatProviderStubLongMessage();
-//		ChatSession chatSession = new ChatSession(chatProvider);
 		when(provider.getMaxMessageLength()).thenReturn(25);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(2, result);
@@ -80,8 +70,6 @@ public class SendMessageTest {
 		String message = "";
 		String parentlock = "false";
 		
-		//ChatProvider chatProvider = new ChatProviderStubSuccess();
-		//ChatSession chatSession = new ChatSession(null);
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(3, result);
 
@@ -95,7 +83,6 @@ public class SendMessageTest {
 		String parentlock = "true";
 		
 		when(provider.getMaxMessageLength()).thenReturn(50);
-	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
 
@@ -108,7 +95,6 @@ public class SendMessageTest {
 		String parentlock = "false";
 		
 		when(provider.getMaxMessageLength()).thenReturn(50);
-	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(0, result);
 
@@ -122,7 +108,6 @@ public class SendMessageTest {
 		String parentlock = "true";
 		
 		when(provider.getMaxMessageLength()).thenReturn(50);
-	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
 
@@ -136,7 +121,6 @@ public class SendMessageTest {
 		String parentlock = "true";
 		
 		when(provider.getMaxMessageLength()).thenReturn(50);
-	//	ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		int result = chatSession.sendMessage(message, parentlock);
 		assertEquals(4, result);
 
