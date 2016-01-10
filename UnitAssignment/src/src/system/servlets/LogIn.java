@@ -25,6 +25,7 @@ public class LogIn extends HttpServlet {
 	private long incorrectLoginStartTime = 0;
 	private long incorrectLoginDisableStartTime = 0;
 	private boolean accountEnabled = true;
+	private long startTime = 0;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -62,9 +63,10 @@ public class LogIn extends HttpServlet {
 		 
 		 if (user.equals(username))
 		 {
+			 //account is disabled due to parent lock violation
 			 if ("true".equals(session.getAttribute("parentLockDisable")))
 			 {
-				 long startTime = (long) session.getAttribute("parentLockDisabledStartTime");
+				 startTime = (long) session.getAttribute("parentLockDisabledStartTime");
 				 if(System.currentTimeMillis()-startTime<120000)
 				 {
 				 	//account disabled
@@ -76,16 +78,19 @@ public class LogIn extends HttpServlet {
 				     rd.forward(request, response);
 				 }
 				 else{
+					 //enable account
 					 accountEnabled = true;
 					 request.setAttribute("parentLockDisable", "false");
 					 request.setAttribute("accountEnabled", "true");
 				 }
 			 }
-			 
-			 //try with locking
+			  
+			 //try with locking 
 			//if account enabled or the lock time has expired then log ons should be allowed
-			 if (accountEnabled || System.currentTimeMillis()-incorrectLoginDisableStartTime>30000)
+			 if ((accountEnabled || System.currentTimeMillis()-incorrectLoginDisableStartTime>30000)
+					 && !"true".equals(request.getAttribute("parentLockDisable")))
 			 {
+				
 				 incorrectLoginDisableStartTime = 0;
 				 
 				 if (result == 0){
@@ -147,7 +152,7 @@ public class LogIn extends HttpServlet {
 					 }				
 				 }
 			 }
-			 else 
+			 else if(!"true".equals(request.getAttribute("parentLockDisable")))
 			 {
 				 if(incorrectLoginDisableStartTime==0)
 				 {
