@@ -131,6 +131,9 @@
             {
             	document.getElementById("logoutForm").click();
             }
+            else if (res == 7){
+            	alert("You may not send more than 10 messages per minute.");
+            }
             $('#chatmessage').val('');
         });
 

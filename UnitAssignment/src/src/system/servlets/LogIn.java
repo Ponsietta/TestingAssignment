@@ -56,17 +56,29 @@ public class LogIn extends HttpServlet {
 		 
 		 ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		 int result = chatSession.initSession(username, password, friendID);
+		 HttpSession session = request.getSession(true);
 		 
 		 PrintWriter out = response.getWriter();
 		 
 		 if (user.equals(username))
 		 {
+			 if ("true".equals(session.getAttribute("parentLockDisable")))
+			 {
+				 	//account disabled
+				 accountEnabled = false;
+				 request.setAttribute("parentLockDisable", "true");
+				 request.setAttribute("accountEnabled", "false");
+				 request.setAttribute("loginsuccess", "false");
+				 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+			     rd.forward(request, response);
+			 }
+			 
 			 //try with locking
 			//if account enabled or the lock time has expired then log ons should be allowed
 			 if (accountEnabled || System.currentTimeMillis()-disableStartTime>30000)
 			 {
 				 if (result == 0){
-					 HttpSession session = request.getSession(true);
+					 
 					 session.setAttribute("chatSession", chatSession);
 					 session.setAttribute("username", username);
 					 
@@ -137,7 +149,7 @@ public class LogIn extends HttpServlet {
 		 {
 			 //do not use locking strategy
 			 if (result == 0){
-				 HttpSession session = request.getSession(true);
+				 session = request.getSession(true);
 				 session.setAttribute("chatSession", chatSession);
 				 session.setAttribute("username", username);
 				 

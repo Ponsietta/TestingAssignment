@@ -40,7 +40,13 @@
         
 				<hr />
 				
-				<% if ("false".equals(request.getAttribute("accountEnabled")))
+				<% if ("true".equals(request.getAttribute("parentLockDisable")))
+					{%>
+					<div id="lockerror" style="color: red">Parental Lock Violated.
+					Your account is locked.</div>
+            			<br/>
+            	<%}
+				else if ("false".equals(request.getAttribute("accountEnabled")))
 					{%>
 					<div id="lockerror" style="color: red">3 invalid log in attempts made.
 					Your account is locked.</div>

@@ -56,20 +56,23 @@ public class SendMessage extends HttpServlet {
 		 
 		 MessagesSent++;
 		 
-		 if (System.currentTimeMillis()-MessagesSentStartTimer<6000)
+		 if (System.currentTimeMillis()-MessagesSentStartTimer<60000)
 		 {
-			 if (MessagesSent < 10)
+			 if (MessagesSent <= 10)
 			 {
-				
+				 session.setAttribute("parentLockDisable", "false");
 				 result = chatSession.sendMessage(message, lock);
 				 if (result == 4)
 					 ViolationCounter++;
 				 
 				 if (ViolationCounter == 5){
 					 ViolationCounter = 0;
-					 out.println(6);
+					 session.setAttribute("parentLockDisable", "true");
+					
+					 result = 6;
 				 }
 				 
+//				 session.setAttribute("parentLockDisable", "false");
 				 out.println(result);
 			 }
 			 else {
@@ -81,6 +84,7 @@ public class SendMessage extends HttpServlet {
 			 MessagesSentStartTimer = System.currentTimeMillis();
 			 MessagesSent = 1;
 			 
+			 session.setAttribute("parentLockDisable", "false");
 			 result = chatSession.sendMessage(message, lock);
 			 
 			 if (result == 4)
@@ -88,8 +92,10 @@ public class SendMessage extends HttpServlet {
 			 
 			 if (ViolationCounter == 5){
 				 ViolationCounter = 0;
-				 out.println(6);
+				 session.setAttribute("parentLockDisable", "true");
+				 result = 6;
 			 }
+			 //session.setAttribute("parentLockDisable", "false");
 			 out.println(result);
 		 }
 	
