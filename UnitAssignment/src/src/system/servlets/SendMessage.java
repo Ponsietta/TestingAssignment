@@ -68,6 +68,7 @@ public class SendMessage extends HttpServlet {
 				 if (ViolationCounter == 5){
 					 ViolationCounter = 0;
 					 session.setAttribute("parentLockDisable", "true");
+					 session.setAttribute("parentLockDisabledStartTime", System.currentTimeMillis());
 					
 					 result = 6;
 				 }
@@ -93,6 +94,7 @@ public class SendMessage extends HttpServlet {
 			 if (ViolationCounter == 5){
 				 ViolationCounter = 0;
 				 session.setAttribute("parentLockDisable", "true");
+				 session.setAttribute("parentLockDisabledStartTime", System.currentTimeMillis());
 				 result = 6;
 			 }
 			 //session.setAttribute("parentLockDisable", "false");

@@ -23,7 +23,7 @@ public class LogIn extends HttpServlet {
 	private String user = "rebmar"; //assuming we will always use this username to log on
 	private int incorrectLoginCounter = 0;
 	private long incorrectLoginStartTime = 0;
-	private long disableStartTime = 0;
+	private long incorrectLoginDisableStartTime = 0;
 	private boolean accountEnabled = true;
        
     /**
@@ -64,19 +64,30 @@ public class LogIn extends HttpServlet {
 		 {
 			 if ("true".equals(session.getAttribute("parentLockDisable")))
 			 {
+				 long startTime = (long) session.getAttribute("parentLockDisabledStartTime");
+				 if(System.currentTimeMillis()-startTime<120000)
+				 {
 				 	//account disabled
-				 accountEnabled = false;
-				 request.setAttribute("parentLockDisable", "true");
-				 request.setAttribute("accountEnabled", "false");
-				 request.setAttribute("loginsuccess", "false");
-				 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
-			     rd.forward(request, response);
+					 accountEnabled = false;
+					 request.setAttribute("parentLockDisable", "true");
+					 request.setAttribute("accountEnabled", "false");
+					 request.setAttribute("loginsuccess", "false");
+					 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+				     rd.forward(request, response);
+				 }
+				 else{
+					 accountEnabled = true;
+					 request.setAttribute("parentLockDisable", "false");
+					 request.setAttribute("accountEnabled", "true");
+				 }
 			 }
 			 
 			 //try with locking
 			//if account enabled or the lock time has expired then log ons should be allowed
-			 if (accountEnabled || System.currentTimeMillis()-disableStartTime>30000)
+			 if (accountEnabled || System.currentTimeMillis()-incorrectLoginDisableStartTime>30000)
 			 {
+				 incorrectLoginDisableStartTime = 0;
+				 
 				 if (result == 0){
 					 
 					 session.setAttribute("chatSession", chatSession);
@@ -106,7 +117,7 @@ public class LogIn extends HttpServlet {
 							 }
 							 else{
 								 //disable
-								 disableStartTime = System.currentTimeMillis();
+								 incorrectLoginDisableStartTime = System.currentTimeMillis();
 								 accountEnabled = false;
 								 request.setAttribute("accountEnabled", "false");
 								 request.setAttribute("loginsuccess", "false");
@@ -138,6 +149,10 @@ public class LogIn extends HttpServlet {
 			 }
 			 else 
 			 {
+				 if(incorrectLoginDisableStartTime==0)
+				 {
+					 
+				 }
 				 request.setAttribute("accountEnabled", "false");
 				 request.setAttribute("loginsuccess", "false");
 				 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
