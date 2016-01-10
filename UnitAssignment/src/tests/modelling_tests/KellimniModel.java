@@ -13,15 +13,23 @@ public class KellimniModel implements FsmModel
 	private SeleniumAdapter sAdapter = new SeleniumAdapter();
 	
 	private KellimniModelStates pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
-	private KellimniModelStates accountState = KellimniModelStates.UNLOCKED;
+	private KellimniAccountStates accountState = KellimniAccountStates.UNLOCKED;
 	
 	int parentalLockTriggerCount = 0;
 	int loginInvalidCount = 0;
 	int messagesSentCount = 0;	
 	
-	int loginTimerDisable = 30000;
-	int loginTimerDuration = 60000;
+	int invalidLoginsDisabledTimer = 30000;
+	int invalidLoginsTimerDuration = 60000;	
+	int parentalLockDisabledTimer = 120000;
+	
+	int sentMessagesLockTimer = 60000;
+	
+	boolean parentalLock_disabled=false;
+	boolean invalidLogins_disabled=false;
+	
 	long loginTimerStartedAt = 0;
+	long firstSentMessageTimerStartedAt = 0;
 	long timeDisabled = 0;
 	
 	@Action
@@ -33,27 +41,40 @@ public class KellimniModel implements FsmModel
 	
     public boolean loginValidGuard() 
     {
-    	if(accountState == KellimniModelStates.LOCKED && System.currentTimeMillis()-timeDisabled<30000)
-    		accountState = KellimniModelStates.UNLOCKED;
-    	return accountState == KellimniModelStates.UNLOCKED && pageState == KellimniModelStates.SHOW_LOGIN_PAGE;
+    	if(accountState == KellimniAccountStates.LOCKED && invalidLogins_disabled)
+    	{
+    		if(System.currentTimeMillis()-timeDisabled>invalidLoginsDisabledTimer)
+    		{
+    			accountState = KellimniAccountStates.UNLOCKED;
+    		}
+    	}
+    	else if(accountState == KellimniAccountStates.LOCKED && parentalLock_disabled)
+    	{
+    		if(System.currentTimeMillis()-timeDisabled>parentalLockDisabledTimer)
+    		{
+    			accountState = KellimniAccountStates.UNLOCKED;
+    		}
+    	}
+    	
+    	return accountState == KellimniAccountStates.UNLOCKED && pageState == KellimniModelStates.SHOW_LOGIN_PAGE;
     }
     
     @Action
     public void loginInvalid(){
     	
     	sAdapter.loginInvalid();
-    	//if the timer hasnt been set yet, set it.
+    	//if the timer hasn't been set yet, set it.
     	if (loginTimerStartedAt == 0)
     		loginTimerStartedAt = System.currentTimeMillis();
     		
     	
     	loginInvalidCount++;
     	
-    	if(loginInvalidCount==3 && System.currentTimeMillis()-loginTimerStartedAt<60000)
+    	if(loginInvalidCount==3 && System.currentTimeMillis()-loginTimerStartedAt<invalidLoginsTimerDuration)
     	{
     		loginTimerStartedAt = 0;
     		timeDisabled = System.currentTimeMillis();
-    		accountState = KellimniModelStates.LOCKED;
+    		accountState = KellimniAccountStates.LOCKED;
     		loginInvalidCount = 0;
     	}
     }
@@ -65,13 +86,26 @@ public class KellimniModel implements FsmModel
     @Action 
     public void sendMessageValid()
     {
+    	if (firstSentMessageTimerStartedAt == 0)
+    		firstSentMessageTimerStartedAt = System.currentTimeMillis();
+    	
     	pageState = KellimniModelStates.SENDING_MESSAGE;
     	sAdapter.SendMessageValid();
+    	messagesSentCount++;
     	pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     public boolean sendMessageValidGuard(){
-    	return pageState == KellimniModelStates.SHOW_CHAT_PAGE && messagesSentCount<=10;
+    	
+    	if(messagesSentCount==10)
+    	{
+    		if(System.currentTimeMillis()-firstSentMessageTimerStartedAt<sentMessagesLockTimer)
+    			return false;
+    		else 
+    			messagesSentCount=0;
+    	}
+    	
+    	return pageState == KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     @Action 
@@ -81,13 +115,11 @@ public class KellimniModel implements FsmModel
     	
     	if(parentalLockTriggerCount>5)
     	{
-    		System.out.println("Lock that bitch!");
     		sAdapter.logout();
-    		parentalLockTriggerCount =0;
+    		parentalLockTriggerCount = 0;
     		pageState = KellimniModelStates.SHOW_LOGIN_PAGE;
-    		accountState = KellimniModelStates.LOCKED;
+    		accountState = KellimniAccountStates.LOCKED;
     	}
-    	pageState = KellimniModelStates.SHOW_CHAT_PAGE;
     }
     
     public boolean sendMessageInvalidGuard(){
