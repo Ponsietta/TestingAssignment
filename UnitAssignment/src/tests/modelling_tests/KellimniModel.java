@@ -36,7 +36,7 @@ public class KellimniModel implements FsmModel
     public void loginValid() 
 	{
 		sAdapter.loginValid();
-		pageState = KellimniModelStates.SHOWING_CHAT_PAGE;
+		pageState = KellimniModelStates.SHOWING_CHAT_PAGE_NOT_SENDING_MESSAGE;
     }
 	
     public boolean loginValidGuard() 
@@ -89,10 +89,10 @@ public class KellimniModel implements FsmModel
     	if (firstSentMessageTimerStartedAt == 0)
     		firstSentMessageTimerStartedAt = System.currentTimeMillis();
     	
-    	pageState = KellimniModelStates.SENDING_MESSAGE;
+    	pageState = KellimniModelStates.SHOWING_CHAT_PAGE_SENDING_MESSAGE;
     	sAdapter.SendMessageValid();
     	messagesSentCount++;
-    	pageState = KellimniModelStates.SHOWING_CHAT_PAGE;
+    	pageState = KellimniModelStates.SHOWING_CHAT_PAGE_NOT_SENDING_MESSAGE;
     }
     
     public boolean sendMessageValidGuard(){
@@ -105,7 +105,7 @@ public class KellimniModel implements FsmModel
     			messagesSentCount=0;
     	}
     	
-    	return pageState == KellimniModelStates.SHOWING_CHAT_PAGE;
+    	return pageState == KellimniModelStates.SHOWING_CHAT_PAGE_NOT_SENDING_MESSAGE;
     }
     
     @Action 
@@ -123,7 +123,7 @@ public class KellimniModel implements FsmModel
     }
     
     public boolean sendMessageInvalidGuard(){
-    	return pageState == KellimniModelStates.SHOWING_CHAT_PAGE;
+    	return pageState == KellimniModelStates.SHOWING_CHAT_PAGE_NOT_SENDING_MESSAGE;
     }
     
     @Action
@@ -132,10 +132,11 @@ public class KellimniModel implements FsmModel
     	pageState = KellimniModelStates.SHOWING_LOGIN_PAGE;
     	messagesSentCount = 0;
     	parentalLockTriggerCount = 0;
+    	firstSentMessageTimerStartedAt = 0;
     }
     
     public boolean logOutGuard(){
-    	return pageState == KellimniModelStates.SHOWING_CHAT_PAGE;
+    	return pageState == KellimniModelStates.SHOWING_CHAT_PAGE_NOT_SENDING_MESSAGE;
     }
     
 	@Override
