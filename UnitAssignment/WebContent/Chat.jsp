@@ -127,6 +127,10 @@
             else if (res==4) {
                alert("No naughty words please!");
             }
+            else if(res==6)
+            {
+            	document.getElementById("logoutForm").click();
+            }
             $('#chatmessage').val('');
         });
 
