@@ -53,8 +53,7 @@ public class SendMessage extends HttpServlet {
 		 
 		 if (ViolationCounter == 5){
 			 ViolationCounter = 0;
-			 response.sendRedirect("LogIn.jsp");
-			 return;
+			 out.println(6);
 		 }
 		 else {
 			 out.println(result);
