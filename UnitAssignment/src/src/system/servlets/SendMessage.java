@@ -17,6 +17,7 @@ import src.system.ChatSession;
 @WebServlet("/SendMessage")
 public class SendMessage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private int ViolationCounter = 0;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -45,10 +46,20 @@ public class SendMessage extends HttpServlet {
 		 HttpSession session = request.getSession();
 		 ChatSession chatSession = (ChatSession) session.getAttribute("chatSession");
 		 int result = chatSession.sendMessage(message, lock);
-		 
 		 PrintWriter out = response.getWriter();
-		 out.println(result);
-		
+			
+		 if (result == 4)
+			 ViolationCounter++;
+		 
+		 if (ViolationCounter == 5){
+			 ViolationCounter = 0;
+			 response.sendRedirect("LogIn.jsp");
+			 return;
+		 }
+		 else {
+			 out.println(result);
+		 }
+		 
 	}
 
 }
