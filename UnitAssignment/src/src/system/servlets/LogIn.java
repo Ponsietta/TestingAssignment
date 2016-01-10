@@ -59,9 +59,83 @@ public class LogIn extends HttpServlet {
 		 
 		 PrintWriter out = response.getWriter();
 		 
-		 //if account enabled or the lock time has expired then log ons should be allowed
-		 if (accountEnabled || System.currentTimeMillis()-disableStartTime>30000)
+		 if (user.equals(username))
 		 {
+			 //try with locking
+			//if account enabled or the lock time has expired then log ons should be allowed
+			 if (accountEnabled || System.currentTimeMillis()-disableStartTime>30000)
+			 {
+				 if (result == 0){
+					 HttpSession session = request.getSession(true);
+					 session.setAttribute("chatSession", chatSession);
+					 session.setAttribute("username", username);
+					 
+					 response.sendRedirect("Chat.jsp");
+				 }
+				 else 
+				 {
+					 if (result == 1)
+					 {
+						 if (incorrectLoginCounter == 0)
+							 incorrectLoginStartTime = System.currentTimeMillis();
+						 
+						 incorrectLoginCounter++;
+						 //if less than a minute has passed
+						 if (System.currentTimeMillis()-incorrectLoginStartTime < 60000)
+						 {
+							 if (incorrectLoginCounter < 3)
+							 {
+								//ok
+								 accountEnabled = true;
+								 request.setAttribute("accountEnabled", "true");
+								 request.setAttribute("loginsuccess", "false");
+								 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+							     rd.forward(request, response);
+							 }
+							 else{
+								 //disable
+								 disableStartTime = System.currentTimeMillis();
+								 accountEnabled = false;
+								 request.setAttribute("accountEnabled", "false");
+								 request.setAttribute("loginsuccess", "false");
+								 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+							     rd.forward(request, response);
+							 }
+						 }
+						 else {
+							 accountEnabled = true;
+							 request.setAttribute("accountEnabled", "true");
+							 request.setAttribute("loginsuccess", "false");
+							 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+						     rd.forward(request, response);
+							 incorrectLoginStartTime = System.currentTimeMillis();
+							 incorrectLoginCounter = 1;
+						 }
+						 				     
+					     out.println ();
+					 }
+					 else if (result == 2)
+					 {
+						 request.setAttribute("providerfailure", "true");
+						 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+					     rd.forward(request, response);
+					     
+					     out.println ();
+					 }				
+				 }
+			 }
+			 else 
+			 {
+				 request.setAttribute("accountEnabled", "false");
+				 request.setAttribute("loginsuccess", "false");
+				 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+			     rd.forward(request, response);
+			 }
+			 
+		 }
+		 else
+		 {
+			 //do not use locking strategy
 			 if (result == 0){
 				 HttpSession session = request.getSession(true);
 				 session.setAttribute("chatSession", chatSession);
@@ -69,50 +143,13 @@ public class LogIn extends HttpServlet {
 				 
 				 response.sendRedirect("Chat.jsp");
 			 }
-			 else 
-			 {
+			 else {
 				 if (result == 1)
 				 {
-					 if (incorrectLoginCounter == 0)
-						 incorrectLoginStartTime = System.currentTimeMillis();
-					 
-					 incorrectLoginCounter++;
-					 //if less than a minute has passed
-					 if (System.currentTimeMillis()-incorrectLoginStartTime < 60000)
-					 {
-						 if (incorrectLoginCounter < 3)
-						 {
-							//ok
-							 accountEnabled = true;
-							 request.setAttribute("accountEnabled", "true");
-							 request.setAttribute("loginsuccess", "false");
-							 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
-						     rd.forward(request, response);
-						 }
-						 else{
-							 //disable
-							 disableStartTime = System.currentTimeMillis();
-							 accountEnabled = false;
-							 request.setAttribute("accountEnabled", "false");
-							 request.setAttribute("loginsuccess", "false");
-							 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
-						     rd.forward(request, response);
-						 }
-					 }
-					 else {
-						 accountEnabled = true;
-						 request.setAttribute("accountEnabled", "true");
-						 request.setAttribute("loginsuccess", "false");
-						 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
-					     rd.forward(request, response);
-						 incorrectLoginStartTime = System.currentTimeMillis();
-						 incorrectLoginCounter = 1;
-					 }
-					 
-					 
-//					 request.setAttribute("loginsuccess", "false");
-//					 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
-//				     rd.forward(request, response);
+					 request.setAttribute("accountEnabled", "true");
+					 request.setAttribute("loginsuccess", "false");
+					 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
+				     rd.forward(request, response);
 				     
 				     out.println ();
 				 }
@@ -123,16 +160,15 @@ public class LogIn extends HttpServlet {
 				     rd.forward(request, response);
 				     
 				     out.println ();
-				 }				
+				 }	
 			 }
 		 }
-		 else 
-		 {
-			 request.setAttribute("accountEnabled", "false");
-			 request.setAttribute("loginsuccess", "false");
-			 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
-		     rd.forward(request, response);
-		 }
+		 
+		 
+		 
+		 
+		 
+		 
 		 
 		 
 	}

@@ -18,6 +18,8 @@ import src.system.ChatSession;
 public class SendMessage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private int ViolationCounter = 0;
+	private int MessagesSent = 0;
+	private long MessagesSentStartTimer = 0;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,24 +42,57 @@ public class SendMessage extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		 String message = request.getParameter("chatmessage");   
+		
+		if (MessagesSent == 0)
+			MessagesSentStartTimer = System.currentTimeMillis();
+		
+		String message = request.getParameter("chatmessage");   
 		 String lock = request.getParameter("parentalLock");
 		 
 		 HttpSession session = request.getSession();
 		 ChatSession chatSession = (ChatSession) session.getAttribute("chatSession");
-		 int result = chatSession.sendMessage(message, lock);
+		 int result = -1; 
 		 PrintWriter out = response.getWriter();
-			
-		 if (result == 4)
-			 ViolationCounter++;
 		 
-		 if (ViolationCounter == 5){
-			 ViolationCounter = 0;
-			 out.println(6);
+		 MessagesSent++;
+		 
+		 if (System.currentTimeMillis()-MessagesSentStartTimer<6000)
+		 {
+			 if (MessagesSent < 10)
+			 {
+				
+				 result = chatSession.sendMessage(message, lock);
+				 if (result == 4)
+					 ViolationCounter++;
+				 
+				 if (ViolationCounter == 5){
+					 ViolationCounter = 0;
+					 out.println(6);
+				 }
+				 
+				 out.println(result);
+			 }
+			 else {
+				 //dont send it
+				 out.println(7);
+			 }
 		 }
 		 else {
+			 MessagesSentStartTimer = System.currentTimeMillis();
+			 MessagesSent = 1;
+			 
+			 result = chatSession.sendMessage(message, lock);
+			 
+			 if (result == 4)
+				 ViolationCounter++;
+			 
+			 if (ViolationCounter == 5){
+				 ViolationCounter = 0;
+				 out.println(6);
+			 }
 			 out.println(result);
 		 }
+	
 		 
 	}
 
