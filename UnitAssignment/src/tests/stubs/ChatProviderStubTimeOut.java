@@ -25,7 +25,7 @@ private String username = null;
 		if(username == null)
 			return 2;
 		
-		return 0;
+		return 1;
 	}
 
 	@Override
