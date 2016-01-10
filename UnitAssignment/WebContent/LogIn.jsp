@@ -40,7 +40,13 @@
         
 				<hr />
 				
-				<% if("false".equals(request.getAttribute("loginsuccess")))
+				<% if ("false".equals(request.getAttribute("accountEnabled")))
+					{%>
+					<div id="lockerror" style="color: red">3 invalid log in attempts made.
+					Your account is locked.</div>
+            			<br/>
+            	<%} 
+					else if("false".equals(request.getAttribute("loginsuccess")))
 					{ %>
             			<div id="loginerror" style="color: red">Invalid login attempt</div>
             			<br/>
