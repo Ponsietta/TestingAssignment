@@ -198,7 +198,7 @@ public class KellimniModel implements FsmModel
         long startTime = System.currentTimeMillis();
         
         do{
-        	tester.generate(30);        
+        	tester.generate();        
         }while(System.currentTimeMillis()-startTime<900000);
         
         tester.printCoverage();

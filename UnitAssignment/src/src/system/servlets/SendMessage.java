@@ -53,9 +53,7 @@ public class SendMessage extends HttpServlet {
 		 ChatSession chatSession = (ChatSession) session.getAttribute("chatSession");
 		 int result = -1; 
 		 PrintWriter out = response.getWriter();
-		 
-		 MessagesSent++;
-		 
+		
 		 ViolationCounter = (int)session.getAttribute("violationCounter");
 		 
 		 if (System.currentTimeMillis()-MessagesSentStartTimer<60000)
@@ -69,6 +67,10 @@ public class SendMessage extends HttpServlet {
 					 ViolationCounter++;
 				 }
 				 
+				 if (result == 0)
+				 {
+					 MessagesSent++;
+				 }
 				 
 				 if (ViolationCounter == 5){
 					 ViolationCounter = 0;
@@ -92,6 +94,11 @@ public class SendMessage extends HttpServlet {
 			 
 			 session.setAttribute("parentLockDisable", "false");
 			 result = chatSession.sendMessage(message, lock);
+			 
+			 if (result == 0)
+			 {
+				 MessagesSent++;
+			 }
 			 
 			 if (result == 4)
 				 ViolationCounter++;
