@@ -39,20 +39,13 @@ public class ChatSession
  		{
  			return (int)future.get(5, TimeUnit.SECONDS); 
  		} 
- 		catch (TimeoutException ex) 
+ 		catch (Exception ex) 
  		{
  			return 2;
- 		}
- 		catch (InterruptedException e) {
- 		   // handle the interrupts
- 		} catch (ExecutionException e) {
- 		   // handle other exceptions
  		}
  		finally{
  			future.cancel(true);
  		}		
-		
- 		return 0;
 	}
 	
 	public int sendMessage(String text, String parentlock)
@@ -97,14 +90,10 @@ public class ChatSession
  		{
  			return 1;
  		}
- 		catch (InterruptedException e) 
+ 		catch (Exception e) 
  		{
  		   return -1;
  		} 
- 		catch (ExecutionException e) 
- 		{
- 		   return -1;
- 		}
  		finally{
  			future.cancel(true);
  		}

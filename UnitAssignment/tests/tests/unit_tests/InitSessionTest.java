@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import src.system.ChatProvider;
 import src.system.ChatSession;
@@ -15,6 +17,9 @@ public class InitSessionTest {
 	
 	ChatSession chatSession;
 	ChatProvider provider;
+	String username = "rebmar";
+	String password = "enternow";
+	String friend = "1";
 
 	@Before
 	public void setUp() throws Exception {
@@ -31,39 +36,35 @@ public class InitSessionTest {
 
 	@Test
 	public void initSuccess() {
-		String username = "reb";
-		String password = "pass";
-		String friend = "1";
-		
 		when(provider.connect(username, password)).thenReturn(0);
-		int result = chatSession.initSession("reb", "pass", friend);
+		int result = chatSession.initSession(username, password, friend);
 		
 		assertEquals(0, result);
-		
 	}
 	
 	@Test
 	public void initInvalidLogin() {
-		
-		String username = "reb";
-		String password = "pass";
-		String friend = "1";
-		
 		when(provider.connect(username, password)).thenReturn(1);
 		int result = chatSession.initSession(username, password, friend);
 		
 		assertEquals(1, result);
-		
 	}
 	
 	@Test
 	public void initTimeOut(){
-		String username = "reb";
-		String password = "pass";
-		String friend = "1";
+		when(provider.connect(username,password)).thenAnswer(new Answer<String>() {
+			   @Override
+			   public String answer(InvocationOnMock invocation){
+			     try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			     return "2";
+			   }
+			});
 		
-		when(provider.connect(username, password)).thenReturn(2);
-		int result = chatSession.initSession("reb", "pass", friend);
+		int result = chatSession.initSession(username, password, friend);
 		
 		assertEquals(2, result);
 	}

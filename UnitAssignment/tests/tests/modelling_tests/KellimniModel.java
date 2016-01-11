@@ -157,6 +157,8 @@ public class KellimniModel implements FsmModel
 			//sAdapter.reset();
 			sAdapter.logout();
 			pageState = KellimniModelStates.LOGGED_OUT;
+			//CHANGE MADE
+			accountState = KellimniAccountStates.UNLOCKED;
 		}
 	}
 	
