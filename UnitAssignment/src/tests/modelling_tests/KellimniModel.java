@@ -12,8 +12,9 @@ public class KellimniModel implements FsmModel
 {
 	private SeleniumAdapter sAdapter = new SeleniumAdapter();
 	
-	private KellimniModelStates pageState = KellimniModelStates.SHOWING_LOGIN_PAGE;
+	private KellimniModelStates pageState = KellimniModelStates.LOGGED_OUT;
 	private KellimniAccountStates accountState = KellimniAccountStates.UNLOCKED;
+	private KellimniMessagingState messagingState = null;
 	
 	int parentalLockTriggerCount = 0;
 	int loginInvalidCount = 0;
@@ -21,12 +22,8 @@ public class KellimniModel implements FsmModel
 	
 	int invalidLoginsDisabledTimer = 30000;
 	int invalidLoginsTimerDuration = 60000;	
-	int parentalLockDisabledTimer = 120000;
-	
+	int parentalLockDisabledTimer = 120000;	
 	int sentMessagesLockTimer = 60000;
-	
-	boolean parentalLock_disabled=false;
-	boolean invalidLogins_disabled=false;
 	
 	long loginTimerStartedAt = 0;
 	long firstSentMessageTimerStartedAt = 0;
@@ -36,19 +33,20 @@ public class KellimniModel implements FsmModel
     public void loginValid() 
 	{
 		sAdapter.loginValid();
-		pageState = KellimniModelStates.SHOWING_CURRENT_CHAT_PAGE;
+		pageState = KellimniModelStates.LOGGED_IN;
+		messagingState = KellimniMessagingState.ENABLED;
     }
 	
     public boolean loginValidGuard() 
     {
-    	if(accountState == KellimniAccountStates.LOCKED && invalidLogins_disabled)
+    	if(accountState == KellimniAccountStates.INVALID_LOGIN_LOCKED)
     	{
     		if(System.currentTimeMillis()-timeDisabled>invalidLoginsDisabledTimer)
     		{
     			accountState = KellimniAccountStates.UNLOCKED;
     		}
     	}
-    	else if(accountState == KellimniAccountStates.LOCKED && parentalLock_disabled)
+    	else if(accountState == KellimniAccountStates.PARENTAL_LOCKED)
     	{
     		if(System.currentTimeMillis()-timeDisabled>parentalLockDisabledTimer)
     		{
@@ -56,7 +54,7 @@ public class KellimniModel implements FsmModel
     		}
     	}
     	
-    	return accountState == KellimniAccountStates.UNLOCKED && pageState == KellimniModelStates.SHOWING_LOGIN_PAGE;
+    	return accountState == KellimniAccountStates.UNLOCKED && pageState == KellimniModelStates.LOGGED_OUT;
     }
     
     @Action
@@ -74,13 +72,13 @@ public class KellimniModel implements FsmModel
     	{
     		loginTimerStartedAt = 0;
     		timeDisabled = System.currentTimeMillis();
-    		accountState = KellimniAccountStates.LOCKED;
+    		accountState = KellimniAccountStates.INVALID_LOGIN_LOCKED;
     		loginInvalidCount = 0;
     	}
     }
     
     public boolean loginInvalidGuard(){
-    	return pageState == KellimniModelStates.SHOWING_LOGIN_PAGE;
+    	return pageState == KellimniModelStates.LOGGED_OUT;
     }
     
     @Action 
@@ -91,7 +89,6 @@ public class KellimniModel implements FsmModel
     	
     	sAdapter.SendMessageValid();
     	messagesSentCount++;
-    	pageState = KellimniModelStates.SHOWING_CURRENT_CHAT_PAGE;
     }
     
     public boolean sendMessageValidGuard(){
@@ -99,12 +96,15 @@ public class KellimniModel implements FsmModel
     	if(messagesSentCount==10)
     	{
     		if(System.currentTimeMillis()-firstSentMessageTimerStartedAt<sentMessagesLockTimer)
+    		{
+    			messagingState = KellimniMessagingState.DISABLED;
     			return false;
+    		}
     		else 
     			messagesSentCount=0;
     	}
     	
-    	return pageState == KellimniModelStates.SHOWING_CURRENT_CHAT_PAGE;
+    	return pageState == KellimniModelStates.LOGGED_IN;
     }
     
     @Action 
@@ -116,26 +116,26 @@ public class KellimniModel implements FsmModel
     	{
     		sAdapter.logout();
     		parentalLockTriggerCount = 0;
-    		pageState = KellimniModelStates.SHOWING_LOGIN_PAGE;
-    		accountState = KellimniAccountStates.LOCKED;
+    		pageState = KellimniModelStates.LOGGED_OUT;
+    		accountState = KellimniAccountStates.PARENTAL_LOCKED;
     	}
     }
     
     public boolean sendMessageInvalidGuard(){
-    	return pageState == KellimniModelStates.SHOWING_CURRENT_CHAT_PAGE;
+    	return pageState == KellimniModelStates.LOGGED_IN;
     }
     
     @Action
     public void logOut(){
     	sAdapter.logout();	
-    	pageState = KellimniModelStates.SHOWING_LOGIN_PAGE;
+    	pageState = KellimniModelStates.LOGGED_OUT;
     	messagesSentCount = 0;
     	parentalLockTriggerCount = 0;
     	firstSentMessageTimerStartedAt = 0;
     }
     
     public boolean logOutGuard(){
-    	return pageState == KellimniModelStates.SHOWING_CURRENT_CHAT_PAGE;
+    	return pageState == KellimniModelStates.LOGGED_IN;
     }
     
 	@Override
@@ -153,7 +153,7 @@ public class KellimniModel implements FsmModel
 			//TODO needs editing
 			//sAdapter.reset();
 			sAdapter.logout();
-			pageState = KellimniModelStates.SHOWING_LOGIN_PAGE;
+			pageState = KellimniModelStates.LOGGED_OUT;
 		}
 	}
 	
