@@ -59,6 +59,8 @@ public class LogIn extends HttpServlet {
 		 int result = chatSession.initSession(username, password, friendID);
 		 HttpSession session = request.getSession(true);
 		 
+		 session.setAttribute("violationCounter", 0);
+		 
 		 PrintWriter out = response.getWriter();
 		 
 		 if (user.equals(username))

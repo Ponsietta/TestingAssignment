@@ -12,13 +12,6 @@ public class SeleniumAdapter {
 		commonSteps.StartUp();
 	}
 	
-	//not sure if we need below method.. could be
-	public void reset() 
-	{
-		//commonSteps.TearDown();
-	    //commonSteps.StartUp();
-	}
-	
 	public void loginValid()
 	{
 		loginSteps.GivenIAmAUserTryingToLogIn();
@@ -48,6 +41,10 @@ public class SeleniumAdapter {
 		chatSteps.GivenIAmOnTheChatPage();
 		chatSteps.WhenISendAMessageWith("Fudge");
 		chatSteps.ThenAnErrorWillTellMeThatTheMessageWasNotSent();
+	}
+	
+	public void CheckMessageNotInChat()
+	{
 		chatSteps.ThenTheMessageShouldNotAppearInMyTextWindow();
 	}
 	

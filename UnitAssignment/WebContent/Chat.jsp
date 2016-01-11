@@ -129,6 +129,7 @@
             }
             else if(res==6)
             {
+            	alert("No naughty words please!");
             	document.getElementById("logoutForm").click();
             }
             else if (res == 7){
