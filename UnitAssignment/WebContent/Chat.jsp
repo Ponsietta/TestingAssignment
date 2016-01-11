@@ -115,7 +115,7 @@
                         + "src=\"~/Content/img/user.png\" /> </a><div class=\"media-body\"> "
                         + res
                         + "<br /><small class=\"text-muted\">"
-                        + "${username}" + " | "
+                        + "Friend" + " | "
                         + new Date().toLocaleString()  + "</small>"
                         + "<hr /> </div> </div></div> </li> ";
                         
