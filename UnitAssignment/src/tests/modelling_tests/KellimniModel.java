@@ -89,7 +89,6 @@ public class KellimniModel implements FsmModel
     	if (firstSentMessageTimerStartedAt == 0)
     		firstSentMessageTimerStartedAt = System.currentTimeMillis();
     	
-    	pageState = KellimniModelStates.SENDING_MESSAGE;
     	sAdapter.SendMessageValid();
     	messagesSentCount++;
     	pageState = KellimniModelStates.SHOWING_CURRENT_CHAT_PAGE;

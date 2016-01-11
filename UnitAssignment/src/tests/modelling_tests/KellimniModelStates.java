@@ -4,7 +4,6 @@ public enum KellimniModelStates
 {
 	SHOWING_LOGIN_PAGE,
 	SHOWING_CURRENT_CHAT_PAGE,
-	SENDING_MESSAGE
 }
 
 

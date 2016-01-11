@@ -1,6 +1,7 @@
 package tests.modelling_tests;
 
 public enum KellimniAccountStates {
-	LOCKED,
+	INVALID_LOGIN_LOCKED,
+	PARENTAL_LOCKED,
 	UNLOCKED,
 }
