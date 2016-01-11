@@ -101,10 +101,13 @@ public class KellimniModel implements FsmModel
     			return false;
     		}
     		else 
+    		{
     			messagesSentCount=0;
+    			messagingState = KellimniMessagingState.ENABLED;
+    		}
     	}
     	
-    	return pageState == KellimniModelStates.LOGGED_IN;
+    	return pageState == KellimniModelStates.LOGGED_IN && messagingState == KellimniMessagingState.ENABLED;
     }
     
     @Action 
@@ -122,7 +125,7 @@ public class KellimniModel implements FsmModel
     }
     
     public boolean sendMessageInvalidGuard(){
-    	return pageState == KellimniModelStates.LOGGED_IN;
+    	return pageState == KellimniModelStates.LOGGED_IN && messagingState == KellimniMessagingState.ENABLED;
     }
     
     @Action
