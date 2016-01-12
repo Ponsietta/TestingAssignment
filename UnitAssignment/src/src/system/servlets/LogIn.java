@@ -39,10 +39,7 @@ public class LogIn extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-
-		
-		 
+		// TODO Auto-generated method stub	 
 		   
 	}
 
@@ -51,10 +48,12 @@ public class LogIn extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+		//Get log in details from the request, assume friend ID is 1.
 		 String username = request.getParameter("username");   
 		 String password = request.getParameter("password");
 		 String friendID = "1";		 
 		 
+		 //Use the ChatProviderStubSuccess stub instead of passing in null and initialise a Chat Session
 		 ChatSession chatSession = new ChatSession(new ChatProviderStubSuccess());
 		 int result = chatSession.initSession(username, password, friendID);
 		 HttpSession session = request.getSession(true);
@@ -63,6 +62,7 @@ public class LogIn extends HttpServlet {
 		 
 		 PrintWriter out = response.getWriter();
 		 
+		 //If the username is 'rebmar'
 		 if (user.equals(username))
 		 {
 			 //account is disabled due to parent lock violation
@@ -95,6 +95,7 @@ public class LogIn extends HttpServlet {
 				
 				 incorrectLoginDisableStartTime = 0;
 				 
+				 //If log in successful, redirect to the Chat page
 				 if (result == 0){
 					 
 					 session.setAttribute("chatSession", chatSession);
@@ -104,8 +105,10 @@ public class LogIn extends HttpServlet {
 				 }
 				 else 
 				 {
+					 //If a log in with incorrect parameters has been attempted
 					 if (result == 1)
 					 {
+						 //If incorrect login timer has not yet been started, start it now.
 						 if (incorrectLoginCounter == 0)
 							 incorrectLoginStartTime = System.currentTimeMillis();
 						 
@@ -115,7 +118,7 @@ public class LogIn extends HttpServlet {
 						 {
 							 if (incorrectLoginCounter < 3)
 							 {
-								//ok
+								//account can remain enabled
 								 accountEnabled = true;
 								 request.setAttribute("accountEnabled", "true");
 								 request.setAttribute("loginsuccess", "false");
@@ -123,7 +126,7 @@ public class LogIn extends HttpServlet {
 							     rd.forward(request, response);
 							 }
 							 else{
-								 //disable
+								 //disable this account
 								 incorrectLoginDisableStartTime = System.currentTimeMillis();
 								 accountEnabled = false;
 								 request.setAttribute("accountEnabled", "false");
@@ -132,7 +135,13 @@ public class LogIn extends HttpServlet {
 							     rd.forward(request, response);
 							 }
 						 }
-						 else {
+						 else { 
+							 /*	if more than a minute has passed and log in was incorrect
+							 	enable account
+							 	reset timers
+							 	stay on log in page
+							 */
+							 
 							 accountEnabled = true;
 							 request.setAttribute("accountEnabled", "true");
 							 request.setAttribute("loginsuccess", "false");
@@ -144,7 +153,7 @@ public class LogIn extends HttpServlet {
 						 				     
 					     out.println ();
 					 }
-					 else if (result == 2)
+					 else if (result == 2) //if the provider failed, remain on LogIn page
 					 {
 						 request.setAttribute("providerfailure", "true");
 						 RequestDispatcher rd = request.getRequestDispatcher("/LogIn.jsp");
@@ -169,6 +178,7 @@ public class LogIn extends HttpServlet {
 		 }
 		 else
 		 {
+			 //the account is not 'rebmar'
 			 //do not use locking strategy
 			 if (result == 0){
 				 session = request.getSession(true);

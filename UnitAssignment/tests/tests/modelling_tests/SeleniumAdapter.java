@@ -1,6 +1,12 @@
 package tests.modelling_tests;
 import tests.web_tests.StepDefinitions.*;
 
+/**
+ * Acts as an interface between the model 
+ * and the selenium tests created in the web 
+ * testing section of the assignment.
+ */
+
 public class SeleniumAdapter {
 
 	public CommonSteps commonSteps = new CommonSteps();

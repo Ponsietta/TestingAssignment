@@ -15,7 +15,6 @@ public class Login
     private String usernameID = "username";
     private String passwordID = "password";
     private String loginBtnID = "login";
-    private String loggedInUserID = "loginCredential";
 
     public Login(WebDriver driverIn)
     { 
@@ -50,8 +49,7 @@ public class Login
     {
         try
         {
-            //driver.findElement(By.id(loggedInUserID));
-        	driver.findElement(By.id(logoutBtnID));
+            driver.findElement(By.id(logoutBtnID));
             return true;
         }
         catch (org.openqa.selenium.NoSuchElementException e)

@@ -43,9 +43,11 @@ public class SendMessage extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+		//If no messages have been sent, start the timer
 		if (MessagesSent == 0)
 			MessagesSentStartTimer = System.currentTimeMillis();
 		
+		//Get the message and parent lock value from the request
 		String message = request.getParameter("chatmessage");   
 		 String lock = request.getParameter("parentalLock");
 		 
@@ -56,27 +58,33 @@ public class SendMessage extends HttpServlet {
 		
 		 ViolationCounter = (int)session.getAttribute("violationCounter");
 		 
+		 //If a minute has not yet passed since when the first message was sent
 		 if (System.currentTimeMillis()-MessagesSentStartTimer<60000)
 		 {
+			 //If 10 or less messages have been sent
 			 if (MessagesSent <= 10)
-			 {
+			 { 
 				 session.setAttribute("parentLockDisable", "false");
 				 result = chatSession.sendMessage(message, lock);
+				 
+				 //If the message violated the parent lock
 				 if (result == 4)
-				 {
 					 ViolationCounter++;
-				 }
 				 
+				 //Increase the amount of messages sent, only if the message was valid
 				 if (result == 0)
-				 {
 					 MessagesSent++;
-				 }
 				 
+				 //If the user has violated parent lock 5 times
 				 if (ViolationCounter == 5){
+					 
+					 //Reset the counter
+					 //Set appropriate variables
 					 ViolationCounter = 0;
 					 session.setAttribute("parentLockDisable", "true");
 					 session.setAttribute("parentLockDisabledStartTime", System.currentTimeMillis());
 					
+					 //Return 6 which indicates that the parent lock violation has occurred and account must be diabled
 					 result = 6;
 				 }
 				 
@@ -84,26 +92,31 @@ public class SendMessage extends HttpServlet {
 				 out.println(result);
 			 }
 			 else {
-				 //dont send it
+				 //don't send the message and return 7 which indicates more than 10 msgs/min have been sent
 				 out.println(7);
 			 }
 		 }
-		 else {
+		 else { //If a minute has passed since the first message was sent
+			 
+			 //Reset timers and counters
 			 MessagesSentStartTimer = System.currentTimeMillis();
 			 MessagesSent = 1;
 			 
 			 session.setAttribute("parentLockDisable", "false");
 			 result = chatSession.sendMessage(message, lock);
 			 
+			 //If message was a valid message, increment number of messages sent
 			 if (result == 0)
-			 {
 				 MessagesSent++;
-			 }
 			 
+			 //If message was invalid, increment number of parent lock violations made
 			 if (result == 4)
 				 ViolationCounter++;
 			 
+			 //If 5 parent lock violations were made
 			 if (ViolationCounter == 5){
+				 //Reset counters and set appropriate variables and locks
+				 //Return result 6 to indicate a parent lock violation so as to disable the account
 				 ViolationCounter = 0;
 				 session.setAttribute("parentLockDisable", "true");
 				 session.setAttribute("parentLockDisabledStartTime", System.currentTimeMillis());
